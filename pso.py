@@ -7,14 +7,15 @@ nPartikel = 100
 dimensionen = 2
 Grenze_min = -100.0
 Grenze_max = 100.0
-maxIt = 30
+maxIt = 300
 images = []
 w = 0.9
 
 def main():
   gbest, gbest_Z = pso(nPartikel, dimensionen, Grenze_min, Grenze_max, maxIt)
   x_min, y_min, z_min = Optimum()
-  print("beste ermittelte Position(x, y):",gbest, "z:",gbest_Z,"\ntatsächliches Optimum:",x_min,"y:",y_min,"z:",z_min)
+  print("beste ermittelte Position(x, y):",gbest, "z:",gbest_Z,
+        "\ntatsächliches Optimum: x:",x_min,"y:",y_min,"z:",z_min)
   psoAnim = animation.ArtistAnimation(fig, images)
   psoAnim.save('./pso-Animation.gif', writer='pillow')
 
@@ -43,7 +44,7 @@ def pso(nPartikel, dimensionen, Grenze_min, Grenze_max, maxIt):
   for t in range(maxIt):
     image = ax.scatter3D([particles[n][0] for n in range(nPartikel)],
                          [particles[n][1] for n in range(nPartikel)],
-                         [func(particles[n][0],particles[n][1]) for n in range(nPartikel)], color = 'orangered')
+                         [func(particles[n][0],particles[n][1]) for n in range(nPartikel)], c = 'orangered')
     images.append([image])
     for n in range(nPartikel):
         # Update Geschwindigkeit 
@@ -59,9 +60,9 @@ def pso(nPartikel, dimensionen, Grenze_min, Grenze_max, maxIt):
 def update_velocity(particle, velocity, pbest, gbest, current_w):
   num_particle = len(particle)
   new_velocity = np.array([0.0 for i in range(num_particle)])
-  r1 = random.uniform(0, 1)
-  r2 = random.uniform(0, 1)
-  c1 = c2 = 2
+  r1 = np.random.rand(1)
+  r2 = np.random.rand(1)
+  c1 = c2 = 0.1
   for i in range(num_particle):
     new_velocity[i] = current_w*velocity[i] + c1*r1*(pbest[i]-particle[i]) + c2*r2*(gbest[i]-particle[i])
   return new_velocity
